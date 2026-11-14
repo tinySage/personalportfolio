@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
 
-// On Vercel this resolves to the production domain, so share images get absolute URLs.
-const site = process.env.VERCEL_PROJECT_PRODUCTION_URL
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
-  : "http://localhost:3000";
+// Resolves to the production domain so share images get absolute URLs.
+// Netlify sets URL at build time; the Vercel variable is kept in case the site moves back.
+const site =
+  process.env.URL ||
+  (process.env.VERCEL_PROJECT_PRODUCTION_URL ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}` : "http://localhost:3000");
 
 export const metadata: Metadata = {
   metadataBase: new URL(site),

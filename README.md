@@ -28,6 +28,8 @@ npm run typecheck  # TypeScript check
 | --- | --- |
 | `app/data.ts` | Every word on the site: card fields, about text, jobs, research, projects, writing, education, links |
 | `app/page.tsx` | Page structure and markup |
+| `app/ui.tsx` | The gothic wordmark and section heading, shared by all pages |
+| `app/projects/wingloop/page.tsx` | The WingLoop write-up; its text and figures are listed in `app/data.ts`, images in `public/wingloop/` |
 | `app/globals.css` | All styling. Colour and font tokens are at the top |
 | `public/site.js` | Typewriter, ASCII portrait, card tilt and flip, thorns, experience tabs, copy-email button |
 | `public/me.jpg` | Source photo for the ASCII portrait |

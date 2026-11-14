@@ -235,6 +235,7 @@ h1 { font: 700 clamp(44px, 6.4vw, 84px)/1 var(--sans); font-stretch: 88%; letter
 .pp-phases li::before { content: "phase " counter(ph, decimal-leading-zero); font: 500 12px var(--mono); color: var(--rose); text-transform: uppercase; letter-spacing: .1em; }
 .pp-phases h3 { font: 700 20px/1.25 var(--sans); font-stretch: 90%; margin: 6px 0 8px; }
 .pp-phases p { font-size: 15px; max-width: 52ch; }
+.pp-phases.pp-cheats li::before { content: "cheat " counter(ph, decimal-leading-zero); }
 .pp-fig { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 28px; align-items: center; }
 .pp-fig + .pp-fig { margin-top: 36px; }
 .pp-plate { background: #fff; border: 1.5px solid var(--ink); border-radius: 14px; padding: 10px; box-shadow: 6px 6px 0 var(--blush); }

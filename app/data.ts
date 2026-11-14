@@ -164,6 +164,8 @@ export const projects: Project[] = [
     status: "demo run trained, full GPU run pending",
     link: "https://github.com/tinySage/spider-stairs",
     linkLabel: "source",
+    live: "https://tinysage.github.io/spider-stairs/",
+    page: "/projects/spider-stairs",
   },
   {
     no: "05",
@@ -276,6 +278,68 @@ export const wingloop = {
     "Each optimisation was run once, and only the single-element wing is validated against experiment. Everything with a flap is a 2D, fully turbulent, steady-RANS number.",
   ],
   refs: "Reference data: J. Zerihan, An investigation into the aerodynamics of wings in ground effect, PhD thesis, University of Southampton, 2001, Table 15.",
+};
+
+// The Spider Stairs write-up at /projects/spider-stairs
+export const spider = {
+  title: "Spider Stairs",
+  question: "Can an eight-legged robot work out stairs on its own?",
+  lede:
+    "Nobody writes the gait. The spider gets 24 motors, a direction to walk in, and a staircase with steps nearly as tall as it stands, and has to find the rest by trial and error. I set the problem and the design; Claude Code built the simulation and the training loop with me. The interesting part turned out not to be the climbing but the two ways the policy cheated before it learned to walk at all.",
+  repo: "https://github.com/tinySage/spider-stairs",
+  site: "https://tinysage.github.io/spider-stairs/",
+  fields: [
+    ["simulator", "Genesis, GPU-parallel"],
+    ["algorithm", "PPO, asymmetric critic"],
+    ["robot", "8 legs · 24 joints · 3.1 kg"],
+    ["stairs", "2 cm to 12 cm steps"],
+    ["control", "50 Hz policy, 200 Hz PD"],
+    ["demo run", "256 spiders · 3M steps"],
+  ],
+  phases: [
+    ["The animal and the ground", "The spider is generated from a parameter spec rather than modelled by hand, so leg count and segment lengths are variables. Each training tile is a pit to climb out of or a pyramid to come down, with steps laid out as square rings so that walking in any direction meets a staircase."],
+    ["A curriculum that follows ability", "Difficulty is not scheduled by iteration. Every spider holds its own rung on a ladder from 2 cm steps to 12 cm: finish a staircase and it moves up, fail to get halfway and it moves down. The average rung turns out to be a far better progress signal than reward, which falls as the stairs get harder."],
+    ["Catching the cheats", "Twice the policy found a way to score well without walking. Both were invisible in the training curves and only showed up in replay, which is the argument for building the replay tool early rather than last."],
+    ["Evaluating honestly", "Every checkpoint is judged with the exploration noise switched off, one attempt per staircase. A dashboard replays the result in a hand-written 3D renderer, drawn from recorded joint angles, with the footfall pattern underneath so a real gait can be told from a shuffle."],
+  ],
+  cheats: [
+    ["It learned to stand still", "Velocity tracking is normally rewarded with a Gaussian kernel tuned for quadrupeds that run at a metre per second. This spider walks at a third of that, so standing perfectly motionless still collected 53 to 78% of the available reward. Walking is expensive and risky; standing is free. Fixed with a kernel five times tighter and a dense term that pays for the fraction of commanded speed actually achieved."],
+    ["It learned to vibrate", "The next policy reported 81% of episodes finishing their staircase. With the noise off it moved at 0.01 m/s. It had learned that random jitter across 24 joints ratchets a light eight-legged body along on friction, so the exploration noise was doing the walking. Fixed by pricing any foot that slides while it is in contact with the ground."],
+  ],
+  figures: [
+    {
+      src: "/spider-stairs/descent.gif", w: 720, h: 248,
+      alt: "The trained spider walking down a staircase of 12 cm steps, leaving yellow footprints behind it.",
+      head: "Coming down the tallest stairs",
+      body: "A real replay of the trained policy on 12 cm steps, 78% of its own standing height, with the exploration noise off. Feet light up yellow on contact.",
+    },
+    {
+      src: "/spider-stairs/dashboard.png", w: 831, h: 900,
+      alt: "The project dashboard: a 3D replay of the spider, a footfall diagram, the curriculum drawn as a staircase, learning curves and a reward ledger.",
+      head: "The dashboard",
+      body: "One HTML file, no dependencies. The curriculum is drawn to scale against the spider's own height, and the reward ledger shows what each term pays or costs per second.",
+    },
+  ],
+  table: {
+    cols: ["staircase", "step height", "result", "time"],
+    rows: [
+      ["down", "2 cm", "finished", "8.4 s"],
+      ["down", "5.5 cm", "ran out of time", "—"],
+      ["down", "8.5 cm", "finished", "6.8 s"],
+      ["down", "12 cm", "finished", "11.8 s"],
+      ["up", "2 cm", "ran out of time", "—"],
+      ["up", "5.5 cm", "ran out of time", "—"],
+      ["up", "8.5 cm", "ran out of time", "—"],
+      ["up", "12 cm", "ran out of time", "—"],
+    ],
+  },
+  caveats: [
+    "This is a demo run: 256 spiders for 500 iterations, about 1% of the planned training budget, on two CPU cores. The full run needs a GPU and has not been done.",
+    "Not one ascent finished. Going down, gravity helps and the spider mostly has to avoid falling; going up it has to lift its whole mass over a riser eight times per step.",
+    "During training, with the noise on, 83% of episodes finished their staircase. The table above is the same policy evaluated properly, and it is the number that counts.",
+    "The policy is handed a height map of the ground around it, which a real robot would have to infer. Removing it and learning to feel the stairs through joint feedback is the harder problem, and the next one.",
+    "Everything here is simulation. Nothing has been transferred to hardware, and one seed was run, not several.",
+  ],
 };
 
 export const writing = {

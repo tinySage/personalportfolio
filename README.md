@@ -40,12 +40,14 @@ npm run typecheck  # TypeScript check
 
 - **Add LinkedIn or a CV:** fill in `linkedin` or `cv` in `app/data.ts`. For the CV, put `cv.pdf` in `public/` and set `cv: "/cv.pdf"`. Empty links stay hidden.
 - **Change the portrait:** replace `public/me.jpg`. A head-and-shoulders crop on a plain white background works best. Without a photo, the card draws an ASCII heart.
-- **Add a project:** add an entry to `projects` in `app/data.ts`. The card numbering updates on its own.
+- **Add a project:** add an entry to `projects` in `app/data.ts` and give it the next `no`. The total on each card updates on its own. Optional `live` and `page` fields add a live link and a link to a write-up on this site.
 - **Recolour:** edit the tokens at the top of `app/globals.css`.
 
 ## Deploy
 
-On [vercel.com](https://vercel.com), choose **New Project**, import this repository, and press **Deploy**. Vercel detects Next.js automatically and redeploys on every push to `main`.
+The site is deployed on [Netlify](https://www.netlify.com), which detects Next.js and needs no config file. It rebuilds on every push to `main`. To set it up again from scratch: **Add new site**, **Import an existing project**, pick this repository and keep the suggested build command (`npm run build`).
+
+Share-image links are built from Netlify's `URL` variable in `app/layout.tsx`, so they follow the site's primary domain.
 
 ## Credits
 
